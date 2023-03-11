@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="js/cookie.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <form id="fileuploadform">
+      <input type="file" id="inputfile"/>
+      <input type="text" placeholder="Enter desired url" id="desiredurl" required>
+      <button type="submit">Upload</button>
+    </form>
+    <p id="message"></p>
+    <script>
+        $('#fileuploadform').submit(async(e) => {
+            e.preventDefault();
+
+            const form = document.getElementById("fileuploadform")
+            const fileField = document.querySelector('input[type="file"]');
+            const message = document.getElementById("message")  
+            const desiredUrl = document.getElementById("desiredurl")
+            const formData = new FormData(form)     
+            formData.append('file', fileField.files[0]) 
+            formData.append('desired_url', desiredUrl.value) 
+            console.log(desiredUrl.value)
+            console.log(formData)    
+            console.log(fileField.files[0])
+    
+            const response = await fetch('http://127.0.0.1:5000/files', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                headers: {
+                    "Authorization": "Bearer " + getToken("prpln_token"),
+                },
+                body: formData
+            });
+            if(!response.ok) {
+                let json = await response.json()
+                console.log(response.status)
+                console.log(json)    
+                message.innerText = "Upload fail \\o/" 
+            }   
+            else {
+                console.log(response.status)  
+                message.innerText = "Upload success \\o/"
+            }
+        });        
+    </script>
+    
+  </body>
+</html>
