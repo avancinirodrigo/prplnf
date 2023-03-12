@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/prplnf.nav.css">
   <script src="https://code.jquery.com/jquery-3.6.3.min.js"
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script type='text/javascript' src='js/config.js'></script>
 </head>
 
 <body>
@@ -53,7 +54,7 @@
       console.log(JSON.stringify(data));
       const message = document.getElementById('message')
 
-      const response = await fetch('http://127.0.0.1:5000/tokens', {
+      const response = await fetch(localStorage.getItem('prplnbUrl') + '/tokens', {
         method: 'POST',
         mode: 'cors',
         headers: {

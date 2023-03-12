@@ -9,6 +9,7 @@
   <script type='text/javascript' src='js/cookie.js'></script>
   <script src='https://code.jquery.com/jquery-3.6.3.min.js'
     integrity='sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=' crossorigin='anonymous'></script>
+  <script type='text/javascript' src='js/config.js'></script>
 </head>
 
 <body>
@@ -21,7 +22,7 @@
   <div class="img">
     <div class="center">
 
-      <form id='fileuploadform' style="border:1px solid #ccc;"> 
+      <form id='fileuploadform' style="border:1px solid #ccc;">
         <div class="container">
           <h1>Upload</h1>
           <input type='file' id='inputfile' />
@@ -37,8 +38,8 @@
           <h1>Download</h1>
           <input type='text' placeholder='Enter file url' id='download-file-url' required>
           <div style="text-align: right;">
-          <label for="download-revision"><b>Revision:</b></label>
-          <input type="number" id="download-revision" name="download-revision" min="0" max="1000">
+            <label for="download-revision"><b>Revision:</b></label>
+            <input type="number" id="download-revision" name="download-revision" min="0" max="1000">
           </div>
           <p id='download-message'><br></p>
           <button type='submit'>Download</button>
@@ -60,7 +61,7 @@
       const downloadMessage = document.getElementById('download-message');
       downloadMessage.innerText = '\n';
 
-      const response = await fetch('http://127.0.0.1:5000/files/upload', {
+      const response = await fetch(localStorage.getItem('prplnbUrl') + '/files/upload', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -95,7 +96,7 @@
       const uploadMessage = document.getElementById('message');
       uploadMessage.innerText = '\n';
 
-      const response = await fetch('http://127.0.0.1:5000/files/download', {
+      const response = await fetch(localStorage.getItem('prplnbUrl') + '/files/download', {
         method: 'POST',
         mode: 'cors',
         headers: {
