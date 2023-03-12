@@ -1,51 +1,132 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript" src="js/cookie.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <form id="fileuploadform">
-      <input type="file" id="inputfile"/>
-      <input type="text" placeholder="Enter desired url" id="desiredurl" required>
-      <button type="submit">Upload</button>
-    </form>
-    <p id="message"></p>
-    <script>
-        $('#fileuploadform').submit(async(e) => {
-            e.preventDefault();
 
-            const form = document.getElementById("fileuploadform")
-            const fileField = document.querySelector('input[type="file"]');
-            const message = document.getElementById("message")  
-            const desiredUrl = document.getElementById("desiredurl")
-            const formData = new FormData(form)     
-            formData.append('file', fileField.files[0]) 
-            formData.append('desired_url', desiredUrl.value) 
-            console.log(desiredUrl.value)
-            console.log(formData)    
-            console.log(fileField.files[0])
-    
-            const response = await fetch('http://127.0.0.1:5000/files', {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                headers: {
-                    "Authorization": "Bearer " + getToken("prpln_token"),
-                },
-                body: formData
-            });
-            if(!response.ok) {
-                let json = await response.json()
-                console.log(response.status)
-                console.log(json)    
-                message.innerText = "Upload fail \\o/" 
-            }   
-            else {
-                console.log(response.status)  
-                message.innerText = "Upload success \\o/"
-            }
-        });        
-    </script>
-    
-  </body>
+<head>
+  <link rel="stylesheet" href="css/prplnf.css">
+  <link rel="stylesheet" href="css/prplnf.index.css">
+  <link rel="stylesheet" href="css/prplnf.nav.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+  <script type='text/javascript' src='js/cookie.js'></script>
+  <script src='https://code.jquery.com/jquery-3.6.3.min.js'
+    integrity='sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=' crossorigin='anonymous'></script>
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+  <script>
+    $(function () {
+      $("#nav-placeholder").load("nav.html");
+    });
+  </script>
+  <div class="img">
+    <div class="center">
+
+      <form id='fileuploadform' style="border:1px solid #ccc;"> 
+        <div class="container">
+          <h1>Upload</h1>
+          <input type='file' id='inputfile' />
+          <div class="clearfix"></div>
+          <input type='text' placeholder='Enter desired url' id='desiredurl' required>
+          <p id='message'><br></p>
+          <button type='submit'>Upload</button>
+        </div>
+      </form>
+
+      <form id='download-form' style="border:1px solid #ccc">
+        <div class="container">
+          <h1>Download</h1>
+          <input type='text' placeholder='Enter file url' id='download-file-url' required>
+          <div style="text-align: right;">
+          <label for="download-revision"><b>Revision:</b></label>
+          <input type="number" id="download-revision" name="download-revision" min="0" max="1000">
+          </div>
+          <p id='download-message'><br></p>
+          <button type='submit'>Download</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    $('#fileuploadform').submit(async (e) => {
+      e.preventDefault();
+
+      const form = document.getElementById('fileuploadform')
+      const fileField = document.querySelector('input[type="file"]');
+      const message = document.getElementById('message')
+      const desiredUrl = document.getElementById('desiredurl')
+      const formData = new FormData(form)
+      formData.append('file', fileField.files[0])
+      formData.append('desired_url', desiredUrl.value)
+      const downloadMessage = document.getElementById('download-message');
+      downloadMessage.innerText = '\n';
+
+      const response = await fetch('http://127.0.0.1:5000/files/upload', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Authorization': 'Bearer ' + getToken('prpln_token'),
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        let json = await response.json()
+        console.log(response.status)
+        console.log(json)
+        message.innerText = 'Upload failed'
+      }
+      else {
+        console.log(response.status);
+        message.innerText = 'Upload successed';
+        form.reset();
+      }
+    });
+
+    $('#download-form').submit(async (e) => {
+      e.preventDefault();
+
+      const form = document.getElementById('download-form');
+      const message = document.getElementById('download-message');
+      const fileUrl = document.getElementById('download-file-url');
+      const revision = document.getElementById('download-revision');
+      const formData = new FormData(form);
+      formData.append('file_url', fileUrl.value);
+      formData.append('revision', revision.value);
+      console.log(revision.value)
+      const uploadMessage = document.getElementById('message');
+      uploadMessage.innerText = '\n';
+
+      const response = await fetch('http://127.0.0.1:5000/files/download', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Authorization': 'Bearer ' + getToken('prpln_token'),
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        let json = await response.json()
+        console.log(response.status)
+        console.log(json)
+        message.innerText = 'Download failed'
+      }
+      else {
+        console.log(response.status)
+        message.innerText = 'Download successed'
+        let blob = await response.blob()
+        const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        form.reset();
+      }
+    });
+
+  </script>
+
+</body>
+
 </html>

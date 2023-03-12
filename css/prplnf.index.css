@@ -70,14 +70,14 @@ nav .menu{
 }
 .center{
   position: absolute;
-  top: 52%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   padding: 0 20px;
-  text-align: center;
+  /* text-align: center; */
 }
-.center .title{
+/* .center .title{
   color: #fff;
   font-size: 55px;
   font-weight: 600;
@@ -115,4 +115,4 @@ nav .menu{
 .center .btns button:last-child{
   background: white;
   color: black;
-}
+} */

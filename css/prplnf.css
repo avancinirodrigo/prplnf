@@ -1,6 +1,6 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    width:40%;
+    width:80%;
     margin-left:auto;
     margin-right:auto;
 }
@@ -21,10 +21,29 @@ input[type=text]:focus, input[type=password]:focus {
   outline: none;
 }
 
+input[type=file] {
+  color: #ddd;
+}
+
+label {
+  color: #ddd;
+}
+
 hr {
   border: 1px solid #f1f1f1;
   margin-bottom: 25px;
+  color: #ddd;
 }
+
+h1 {
+  color: #ddd;
+}
+
+p {
+  color: #ddd;
+}
+
+
 
 /* Set a style for all buttons */
 button {
@@ -59,6 +78,12 @@ button:hover {
   padding: 16px;
 }
 
+.left-align {
+  width: 60%;
+  margin:  auto;
+  text-align: left;
+}
+
 /* Clear floats */
 .clearfix::after {
   content: "";
@@ -71,4 +96,9 @@ button:hover {
   .cancelbtn, .signupbtn, .loginbtn {
      width: 100%;
   }
+}
+
+form { 
+  margin: 0 auto; 
+  width:40%;
 }
