@@ -2,6 +2,8 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/prplnf.css">
   <link rel="stylesheet" href="css/prplnf.index.css">
   <link rel="stylesheet" href="css/prplnf.nav.css">
@@ -65,7 +67,7 @@
         method: 'POST',
         mode: 'cors',
         headers: {
-          'Authorization': 'Bearer ' + getToken('prpln_token'),
+          'Authorization': 'Bearer ' + getToken('token')
         },
         body: formData
       });
